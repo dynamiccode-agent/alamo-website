@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alamo Beer Co. — The Backyard's Best Beer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ==============================
+       RESET & BASE
+    ============================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: #F2EDD5;
+      color: #1C1C1C;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    :root {
+      --blue: #1950C2;
+      --red: #FE1A1E;
+      --yellow: #FEDF30;
+      --cream: #F2EDD5;
+      --dark: #1C1C1C;
+    }
+
+    /* ==============================
+       CUSTOM CURSOR
+    ============================== */
+    .cursor {
+      position: fixed;
+      width: 14px;
+      height: 14px;
+      background: var(--red);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s ease, width 0.25s ease, height 0.25s ease, background 0.25s ease;
+      mix-blend-mode: normal;
+    }
+    .cursor.big {
+      width: 40px;
+      height: 40px;
+      background: rgba(254, 26, 30, 0.25);
+      border: 2px solid var(--red);
+    }
+
+    /* ==============================
+       NAV
+    ============================== */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.6rem 3.5rem;
+      transition: background 0.45s ease, padding 0.45s ease, box-shadow 0.45s ease;
+    }
+    nav.solid {
+      background: var(--blue);
+      padding: 1rem 3.5rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+    }
+    .nav-logo { height: 44px; width: auto; object-fit: contain; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      background: var(--red) !important;
+      color: white !important;
+      opacity: 1 !important;
+      padding: 0.55rem 1.4rem;
+      clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+      transition: background 0.2s ease !important;
+    }
+    .nav-cta:hover { background: var(--yellow) !important; color: var(--dark) !important; }
+
+    /* ==============================
+       HERO
+    ============================== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-sky {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg,
+        #5EA8DC 0%,
+        #87C4EA 38%,
+        #B8D8EE 60%,
+        #CCDEA8 78%,
+        #A89A6A 92%,
+        #7A6840 100%
+      );
+    }
+
+    /* Grain overlay */
+    .hero-sky::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.45;
+      pointer-events: none;
+    }
+
+    .hero-scene {
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 54%;
+      object-fit: cover;
+      object-position: center bottom;
+      z-index: 2;
+      will-change: transform;
+    }
+
+    .hero-can {
+      position: absolute;
+      right: 4%;
+      top: 22%;
+      height: clamp(240px, 36vh, 460px);
+      z-index: 6;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.5));
+      animation: heroFloat 4s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    @keyframes heroFloat {
+      0%,100% { transform: rotate(-4deg); }
+      50%      { transform: translateY(-20px) rotate(4deg); }
+    }
+
+    /* Characters — spread full width, tall */
+    .hero-chars {
+      position: absolute;
+      bottom: 10%;
+      left: 0;
+      right: 0;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 2% 0 1%;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    .hchar {
+      height: clamp(300px, 46vh, 560px);
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.35));
+      will-change: transform;
+    }
+    /* Hank slightly taller as the main character */
+    .hchar:nth-child(2) { height: clamp(330px, 50vh, 610px); }
+
+    /* Hero content — absolutely positioned in sky area */
+    .hero-content {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 7;
+      text-align: center;
+      width: min(700px, 70vw);
+    }
+
+    /* King of the Hill logo */
+    .koth-logo {
+      width: min(260px, 35vw);
+      display: block;
+      margin: 0 auto 0.6rem;
+      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.5));
+      animation: slideDown 0.7s ease 0.2s both;
+    }
+
+    .hero-logo-img {
+      width: min(560px, 68vw);
+      display: block;
+      margin: 0 auto 1rem;
+      filter: drop-shadow(0 6px 24px rgba(0,0,0,0.5));
+      animation: logoReveal 0.9s cubic-bezier(0.34, 1.2, 0.64, 1) 0.5s both;
+    }
+
+    .hero-tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1rem, 2.8vw, 1.5rem);
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+      animation: slideUp 0.7s ease 1s both;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      margin-top: 2.2rem;
+      background: var(--red);
+      color: white;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.9rem 2.2rem;
+      border: 2px solid rgba(255,255,255,0.4);
+      transition: all 0.25s;
+      animation: slideUp 0.7s ease 1.2s both;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    }
+    .hero-btn:hover {
+      background: var(--yellow);
+      color: var(--dark);
+      border-color: transparent;
+      transform: translateY(-3px);
+    }
+
+    /* Scroll cue */
+    .scroll-cue {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeIn 1s ease 1.8s both;
+    }
+    .scroll-cue span {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+    .scroll-cue-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.7), transparent);
+      animation: scrollLine 1.6s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: top; }
+      51%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ==============================
+       QUOTE STRIP
+    ============================== */
+    .quote-strip {
+      background: var(--blue);
+      padding: 7rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-strip::before {
+      content: '"';
+      position: absolute;
+      top: -5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(18rem, 40vw, 36rem);
+      color: rgba(255,255,255,0.04);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .quote-main {
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(1.9rem, 4.5vw, 4.2rem);
+      color: white;
+      line-height: 1.2;
+      max-width: 840px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .quote-main em { color: var(--yellow); font-style: normal; }
+    .quote-attr {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      position: relative;
+    }
+
+    /* ==============================
+       PRODUCTS — STICKY SCROLL
+    ============================== */
+    #products { position: relative; }
+
+    .products-track {
+      height: 500vh;
+      position: relative;
+    }
+
+    .products-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .p-slide {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 0 6% 0 8%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s ease;
+    }
+    .p-slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Backgrounds */
+    .p-slide.s1 { background: #0A1535; }
+    .p-slide.s2 { background: #0D0D0D; }
+    .p-slide.s3 { background: #130800; }
+    .p-slide.s4 { background: #0C1B30; }
+
+    /* Info side */
+    .p-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      opacity: 0.45;
+    }
+    .s1 .p-num { color: var(--yellow); }
+    .s2 .p-num { color: rgba(255,255,255,0.5); }
+    .s3 .p-num { color: var(--yellow); }
+    .s4 .p-num { color: #C8A84B; }
+
+    .p-name {
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(3.2rem, 7.5vw, 7.5rem);
+      line-height: 0.92;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+    .s1 .p-name { color: white; }
+    .s2 .p-name { color: white; }
+    .s3 .p-name { color: var(--yellow); }
+    .s4 .p-name { color: white; }
+
+    .p-tag {
+      display: inline-block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.4rem 0.9rem;
+      margin-bottom: 1.6rem;
+    }
+    .s1 .p-tag { background: var(--red); color: white; }
+    .s2 .p-tag { border: 1px solid rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); }
+    .s3 .p-tag { background: var(--yellow); color: var(--dark); }
+    .s4 .p-tag { border: 1px solid rgba(200,168,75,0.4); color: #C8A84B; }
+
+    .p-desc {
+      font-size: 1.05rem;
+      line-height: 1.65;
+      max-width: 380px;
+      margin-bottom: 2.2rem;
+    }
+    .s1 .p-desc { color: rgba(255,255,255,0.55); }
+    .s2 .p-desc { color: rgba(255,255,255,0.5); }
+    .s3 .p-desc { color: rgba(255,200,80,0.6); }
+    .s4 .p-desc { color: rgba(255,255,255,0.5); }
+
+    .p-stats {
+      display: flex;
+      gap: 2.5rem;
+    }
+    .p-stat-val {
+      font-family: 'Alfa Slab One', serif;
+      font-size: 2.1rem;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .p-stat-lbl {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.4;
+    }
+    .s1 .p-stat-val { color: var(--yellow); }
+    .s1 .p-stat-lbl { color: white; }
+    .s2 .p-stat-val { color: white; }
+    .s2 .p-stat-lbl { color: white; }
+    .s3 .p-stat-val { color: var(--yellow); }
+    .s3 .p-stat-lbl { color: var(--yellow); }
+    .s4 .p-stat-val { color: #C8A84B; }
+    .s4 .p-stat-lbl { color: white; }
+
+    /* Can side */
+    .p-can-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .p-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .p-ring-1 {
+      width: 72%;
+      aspect-ratio: 1;
+      animation: spin 22s linear infinite;
+    }
+    .p-ring-2 {
+      width: 52%;
+      aspect-ratio: 1;
+      animation: spin 16s linear infinite reverse;
+    }
+    .s1 .p-ring-1 { border: 1px solid rgba(254,223,48,0.12); }
+    .s1 .p-ring-2 { border: 1px solid rgba(254,26,30,0.1); }
+    .s2 .p-ring-1 { border: 1px solid rgba(255,255,255,0.06); }
+    .s2 .p-ring-2 { border: 1px solid rgba(255,255,255,0.04); }
+    .s3 .p-ring-1 { border: 1px solid rgba(254,223,48,0.15); }
+    .s3 .p-ring-2 { border: 1px solid rgba(254,223,48,0.08); }
+    .s4 .p-ring-1 { border: 1px solid rgba(200,168,75,0.15); }
+    .s4 .p-ring-2 { border: 1px solid rgba(200,168,75,0.08); }
+
+    @keyframes spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .p-can-img {
+      height: clamp(340px, 56vh, 660px);
+      width: auto;
+      object-fit: contain;
+      position: relative;
+      z-index: 2;
+      filter: drop-shadow(0 30px 60px rgba(0,0,0,0.6));
+      transition: transform 0.4s ease;
+    }
+    .p-slide.active .p-can-img {
+      animation: canIn 0.75s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
+    }
+    @keyframes canIn {
+      from { transform: translateY(50px) scale(0.88) rotate(-10deg); opacity: 0; }
+      to   { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+    }
+    .p-can-img:hover {
+      transform: scale(1.04) rotate(4deg);
+    }
+
+    /* Accent glow */
+    .p-can-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 55%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.2;
+      z-index: 1;
+    }
+    .s1 .p-can-glow { background: var(--blue); }
+    .s2 .p-can-glow { background: rgba(255,255,255,0.5); }
+    .s3 .p-can-glow { background: #FFB800; }
+    .s4 .p-can-glow { background: #C8A84B; }
+
+    /* Product nav dots */
+    .p-dots {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      z-index: 150;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .p-dots.show { opacity: 1; }
+    .p-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 0;
+      padding: 0;
+    }
+    .p-dot.on {
+      background: white;
+      transform: scale(1.6);
+    }
+
+    /* ==============================
+       CHARACTERS SECTION
+    ============================== */
+    .chars-section {
+      position: relative;
+      background: var(--cream);
+      padding: 7rem 3rem 0;
+      overflow: hidden;
+    }
+
+    .chars-scene-bg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 55%;
+      object-fit: cover;
+      object-position: center bottom;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .chars-header {
+      text-align: center;
+      margin-bottom: 4rem;
+      position: relative;
+      z-index: 2;
+    }
+    .chars-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.8rem;
+    }
+    .chars-title {
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(2.8rem, 6.5vw, 6rem);
+      color: var(--blue);
+      line-height: 0.95;
+    }
+    .chars-title span { color: var(--red); }
+
+    .chars-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .char-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .char-bubble {
+      position: absolute;
+      bottom: calc(100% - 12px);
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: white;
+      border: 2.5px solid var(--blue);
+      border-radius: 10px;
+      padding: 0.55rem 0.85rem;
+      width: max(160px, 110%);
+      text-align: center;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      color: var(--dark);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 10;
+      white-space: normal;
+    }
+    .char-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -9px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--blue);
+    }
+    .char-item:hover .char-bubble {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .char-img {
+      height: clamp(130px, 20vh, 260px);
+      width: auto;
+      object-fit: contain;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,0.18));
+    }
+    .char-item:hover .char-img {
+      transform: translateY(-14px) scale(1.1);
+    }
+
+    /* ==============================
+       RED MANIFESTO
+    ============================== */
+    .manifesto {
+      background: var(--red);
+      padding: 7.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .manifesto::before {
+      content: 'ALAMO';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(9rem, 22vw, 20rem);
+      color: rgba(255,255,255,0.055);
+      white-space: nowrap;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .manifesto h2 {
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(2.4rem, 5.5vw, 5.2rem);
+      color: white;
+      line-height: 1.08;
+      max-width: 750px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+    }
+    .manifesto p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.75);
+      max-width: 520px;
+      margin: 0 auto 2.8rem;
+      line-height: 1.7;
+      position: relative;
+    }
+    .btn-white {
+      display: inline-block;
+      background: white;
+      color: var(--red);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.4rem;
+      position: relative;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: all 0.25s;
+    }
+    .btn-white:hover {
+      background: var(--yellow);
+      color: var(--dark);
+      transform: translateY(-3px);
+    }
+
+    /* ==============================
+       PRODUCTS CAROUSEL (static showcase)
+    ============================== */
+    .lineup {
+      background: var(--dark);
+      padding: 7rem 4rem;
+    }
+    .lineup-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+    }
+    .lineup-title {
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(2.2rem, 5vw, 4.5rem);
+      color: white;
+      line-height: 1;
+    }
+    .lineup-title span { color: var(--yellow); }
+    .lineup-subtitle {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .lineup-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+
+    .lineup-card {
+      background: #252525;
+      padding: 2.5rem 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.3s ease, background 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .lineup-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: inherit;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .lineup-card:hover { transform: translateY(-8px); }
+    .lineup-card.c1:hover { background: #12204A; }
+    .lineup-card.c2:hover { background: #1A1A1A; }
+    .lineup-card.c3:hover { background: #1C0A00; }
+    .lineup-card.c4:hover { background: #0F1E38; }
+
+    .lcard-img {
+      height: clamp(160px, 22vh, 260px);
+      width: auto;
+      object-fit: contain;
+      margin-bottom: 1.8rem;
+      filter: drop-shadow(0 12px 28px rgba(0,0,0,0.6));
+      transition: transform 0.3s ease;
+    }
+    .lineup-card:hover .lcard-img {
+      transform: scale(1.06) rotate(3deg);
+    }
+    .lcard-name {
+      font-family: 'Alfa Slab One', serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
+    }
+    .c1 .lcard-name { color: white; }
+    .c2 .lcard-name { color: white; }
+    .c3 .lcard-name { color: var(--yellow); }
+    .c4 .lcard-name { color: white; }
+
+    .lcard-style {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 1rem;
+    }
+    .lcard-abv {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+    }
+    .c1 .lcard-abv { color: var(--yellow); }
+    .c2 .lcard-abv { color: rgba(255,255,255,0.7); }
+    .c3 .lcard-abv { color: var(--yellow); }
+    .c4 .lcard-abv { color: #C8A84B; }
+
+    .lcard-bar {
+      width: 32px;
+      height: 3px;
+      margin: 1rem auto 0;
+      transition: width 0.3s;
+    }
+    .lineup-card:hover .lcard-bar { width: 56px; }
+    .c1 .lcard-bar { background: var(--red); }
+    .c2 .lcard-bar { background: rgba(255,255,255,0.4); }
+    .c3 .lcard-bar { background: var(--yellow); }
+    .c4 .lcard-bar { background: #C8A84B; }
+
+    /* ==============================
+       DELIVERY CTA
+    ============================== */
+    .delivery {
+      background: var(--blue);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 3rem;
+      padding: 6rem 8%;
+    }
+    .delivery-text h2 {
+      font-family: 'Alfa Slab One', serif;
+      font-size: clamp(2.4rem, 5vw, 4.5rem);
+      color: white;
+      line-height: 1.05;
+      margin-bottom: 1.3rem;
+    }
+    .delivery-text h2 span { color: var(--yellow); }
+    .delivery-text p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.68;
+      margin-bottom: 2.2rem;
+      max-width: 420px;
+    }
+    .btn-yellow {
+      display: inline-block;
+      background: var(--yellow);
+      color: var(--dark);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 1rem 2.4rem;
+      clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+      transition: all 0.25s;
+    }
+    .btn-yellow:hover {
+      background: white;
+      transform: translateY(-3px);
+    }
+    .delivery-img-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .delivery-img {
+      width: 100%;
+      max-height: 400px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 50px rgba(0,0,0,0.4));
+      animation: delivFloat 5s ease-in-out infinite;
+    }
+    @keyframes delivFloat {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-16px); }
+    }
+
+    /* ==============================
+       FOOTER
+    ============================== */
+    footer {
+      background: #111;
+      padding: 5rem 4rem 2.5rem;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .footer-brand-logo {
+      height: 50px;
+      margin-bottom: 1.4rem;
+      object-fit: contain;
+      object-position: left;
+    }
+    .footer-brand p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.65;
+      max-width: 270px;
+    }
+    .footer-col h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.6rem; }
+    .footer-col ul li a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    .footer-col ul li a:hover { color: var(--yellow); }
+
+    .footer-bottom {
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-legal {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.2);
+      line-height: 1.5;
+    }
+    .age-badge {
+      background: var(--red);
+      color: white;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      padding: 0.35rem 0.85rem;
+      text-transform: uppercase;
+    }
+
+    /* ==============================
+       SCROLL REVEAL
+    ============================== */
+    .rv {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .rv.in {
+      opacity: 1;
+      transform: none;
+    }
+    .rv-d1 { transition-delay: 0.1s; }
+    .rv-d2 { transition-delay: 0.2s; }
+    .rv-d3 { transition-delay: 0.3s; }
+    .rv-d4 { transition-delay: 0.4s; }
+
+    /* ==============================
+       KEYFRAMES
+    ============================== */
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-18px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes logoReveal {
+      from { opacity: 0; transform: scale(0.86) translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ==============================
+       MARQUEE TICKER
+    ============================== */
+    .ticker {
+      background: var(--yellow);
+      overflow: hidden;
+      padding: 0.8rem 0;
+      white-space: nowrap;
+    }
+    .ticker-track {
+      display: inline-flex;
+      gap: 0;
+      animation: ticker 28s linear infinite;
+    }
+    .ticker-item {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dark);
+      padding: 0 2rem;
+    }
+    .ticker-sep {
+      color: var(--red);
+      padding: 0 0.5rem;
+    }
+    @keyframes ticker {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ==============================
+       MOBILE — ≤ 900px (tablet)
+    ============================== */
+    @media (max-width: 900px) {
+      .lineup-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer-brand { grid-column: 1 / -1; }
+      .delivery { grid-template-columns: 1fr; padding: 4rem 6%; gap: 2.5rem; text-align: center; }
+      .delivery-text { order: 2; }
+      .delivery-img-wrap { order: 1; }
+      .delivery-text p { max-width: 100%; }
+    }
+
+    /* ==============================
+       MOBILE — ≤ 640px (phone)
+    ============================== */
+    @media (max-width: 640px) {
+
+      /* Custom cursor off on touch */
+      .cursor { display: none; }
+      body { cursor: auto; }
+
+      /* ── NAV ── */
+      nav {
+        padding: 0.9rem 1.25rem;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 100%);
+      }
+      nav.solid { padding: 0.7rem 1.25rem; }
+      .nav-logo { height: 34px; }
+      /* Hide all links except Order Now CTA */
+      .nav-links li { display: none; }
+      .nav-links li:last-child { display: block; }
+      .nav-cta { font-size: 0.75rem; padding: 0.5rem 1rem; }
+
+      /* ── HERO ── */
+      .hero { min-height: 100dvh; height: 100dvh; }
+
+      .hero-scene { height: 48%; }
+
+      /* Hide floating can on mobile — characters carry the visual */
+      .hero-can { display: none; }
+
+      /* Characters: smaller, all 4 across full width */
+      .hero-chars {
+        bottom: 8%;
+        padding: 0 0.5%;
+        justify-content: space-evenly;
+      }
+      .hchar { height: clamp(190px, 28dvh, 280px); }
+      .hchar:nth-child(2) { height: clamp(210px, 31dvh, 310px); }
+
+      /* Hero content: tighter, font-scaled */
+      .hero-content {
+        top: 7%;
+        width: min(92vw, 360px);
+      }
+      .koth-logo {
+        width: min(130px, 34vw);
+        margin-bottom: 0.4rem;
+      }
+      .hero-logo-img {
+        width: min(280px, 72vw);
+        margin-bottom: 0.6rem;
+      }
+      .hero-tagline {
+        font-size: 0.68rem;
+        letter-spacing: 0.22em;
+      }
+      .hero-btn {
+        margin-top: 1rem;
+        padding: 0.7rem 1.5rem;
+        font-size: 0.78rem;
+      }
+
+      /* Scroll cue */
+      .scroll-cue { bottom: 1.25rem; }
+      .scroll-cue-line { height: 32px; }
+
+      /* ── TICKER ── */
+      .ticker { padding: 0.55rem 0; }
+      .ticker-item { font-size: 0.72rem; padding: 0 1rem; }
+
+      /* ── QUOTE ── */
+      .quote-strip { padding: 4rem 1.5rem; }
+      .quote-main { font-size: clamp(1.35rem, 5.5vw, 2rem); }
+      .quote-attr { font-size: 0.72rem; }
+
+      /* ── PRODUCTS STICKY (single-column stack) ── */
+      .products-track { height: 400dvh; }
+
+      .p-slide {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        padding: 4.5rem 1.25rem 1.5rem;
+        gap: 0;
+        overflow: hidden;
+      }
+
+      /* Can on top */
+      .p-can-wrap {
+        order: -1;
+        height: 34dvh;
+        min-height: 170px;
+        margin-bottom: 0.5rem;
+      }
+      .p-can-img {
+        height: clamp(150px, 28dvh, 240px);
+      }
+      .p-ring-1 { width: 80%; }
+      .p-ring-2 { width: 60%; }
+
+      /* Info below */
+      .p-num { font-size: 0.68rem; margin-bottom: 0.6rem; }
+      .p-name {
+        font-size: clamp(2rem, 10vw, 3rem);
+        line-height: 0.9;
+        margin-bottom: 0.75rem;
+      }
+      .p-tag { font-size: 0.68rem; padding: 0.3rem 0.7rem; margin-bottom: 0.75rem; }
+      .p-desc {
+        font-size: 0.875rem;
+        line-height: 1.55;
+        margin-bottom: 1rem;
+        max-width: 100%;
+      }
+      .p-stats { gap: 1.5rem; }
+      .p-stat-val { font-size: 1.5rem; }
+      .p-stat-lbl { font-size: 0.6rem; }
+
+      /* Nav dots: smaller, inset */
+      .p-dots { right: 0.6rem; gap: 0.6rem; }
+      .p-dot { width: 6px; height: 6px; }
+
+      /* ── CHARACTERS ── */
+      .chars-section { padding: 3.5rem 0.5rem 0; }
+      .chars-header { margin-bottom: 2.5rem; }
+      .chars-eyebrow { font-size: 0.68rem; }
+      .chars-title { font-size: clamp(1.8rem, 8vw, 3rem); }
+      .chars-row { padding: 0; gap: 0; }
+      .char-img { height: clamp(95px, 14dvh, 150px); }
+      /* Speech bubbles: simplified on mobile */
+      .char-bubble {
+        width: max(100px, 95%);
+        font-size: 0.65rem;
+        padding: 0.35rem 0.5rem;
+        border-width: 2px;
+      }
+
+      /* ── MANIFESTO ── */
+      .manifesto { padding: 4.5rem 1.5rem; }
+      .manifesto::before { font-size: clamp(7rem, 28vw, 12rem); }
+      .manifesto h2 { font-size: clamp(1.9rem, 8vw, 3rem); margin-bottom: 1rem; }
+      .manifesto p { font-size: 0.95rem; margin-bottom: 2rem; }
+
+      /* ── LINEUP ── */
+      .lineup { padding: 3.5rem 1rem; }
+      .lineup-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; margin-bottom: 1.75rem; }
+      .lineup-grid { gap: 0.6rem; }
+      .lineup-card { padding: 1.25rem 0.75rem 1rem; }
+      .lcard-img { height: clamp(100px, 15dvh, 160px); margin-bottom: 1rem; }
+      .lcard-name { font-size: 1rem; }
+      .lcard-style { font-size: 0.62rem; }
+      .lcard-abv { font-size: 0.9rem; }
+
+      /* ── DELIVERY ── */
+      .delivery { padding: 3.5rem 1.25rem; gap: 2rem; }
+      .delivery-text h2 { font-size: clamp(1.9rem, 7vw, 2.8rem); }
+      .delivery-text p { font-size: 0.95rem; margin-bottom: 1.5rem; }
+      .delivery-img { max-height: 240px; }
+
+      /* ── FOOTER ── */
+      footer { padding: 2.5rem 1.25rem 2rem; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-brand-logo { height: 40px; }
+      .footer-brand p { font-size: 0.8rem; }
+      .footer-bottom { padding-top: 1.25rem; }
+      .footer-legal { font-size: 0.68rem; }
+
+      /* ── BUTTONS ── */
+      .btn-white, .btn-yellow {
+        padding: 0.85rem 1.8rem;
+        font-size: 0.82rem;
+        min-height: 44px;
+      }
+
+      /* ── REVEAL ── */
+      .rv { transform: translateY(14px); }
+    }
+
+    /* ── 380px and below: hide one character ── */
+    @media (max-width: 380px) {
+      .hchar:nth-child(4) { display: none; }
+      .hchar:nth-child(1) { display: none; }
+      .hero-chars { justify-content: center; gap: 6%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cursor -->
+  <div class="cursor" id="cursor"></div>
+
+  <!-- Nav -->
+  <nav id="nav">
+    <img src="assets/White Alamo Logo.png" class="nav-logo" alt="Alamo Beer">
+    <ul class="nav-links">
+      <li><a href="#products">Our Beers</a></li>
+      <li><a href="#chars">The Crew</a></li>
+      <li><a href="history.html">Our Story</a></li>
+      <li><a href="#delivery">Find Us</a></li>
+      <li><a href="#delivery" class="nav-cta">Order Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- ======================== HERO ======================== -->
+  <section class="hero" id="hero">
+    <div class="hero-sky"></div>
+
+    <img class="hero-scene" id="heroScene"
+         src="assets/Scene Environment Extended.png" alt="">
+
+    <!-- Characters at fence line -->
+    <div class="hero-chars" id="heroChars">
+      <img class="hchar" src="assets/Character friend.png" alt="">
+      <img class="hchar" src="assets/Character main.png" alt="">
+      <img class="hchar" src="assets/Character wife.png" alt="">
+      <img class="hchar" src="assets/Character friend 2.png" alt="">
+    </div>
+
+    <!-- Floating can -->
+    <img class="hero-can" src="assets/Alamo - Main - Product Shot.png" alt="Alamo Beer">
+
+    <!-- Content -->
+    <div class="hero-content">
+      <img class="koth-logo" src="assets/King of the Hill logo.png" alt="King of the Hill">
+      <img class="hero-logo-img" src="assets/Logo main.svg" alt="Alamo Beer">
+      <p class="hero-tagline">The Backyard's Best Beer</p>
+      <a href="#products" class="hero-btn">Crack One Open</a>
+    </div>
+
+    <div class="scroll-cue">
+      <span>Scroll</span>
+      <div class="scroll-cue-line"></div>
+    </div>
+  </section>
+
+  <!-- ======================== TICKER ======================== -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Alamo Original</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Dark Lager</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Gold Light Lager</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Hayz Street IPA</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Ice Cold Since Texas</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">The Backyard's Best Beer</span><span class="ticker-sep">★</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item">Alamo Original</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Dark Lager</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Gold Light Lager</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Hayz Street IPA</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">Ice Cold Since Texas</span><span class="ticker-sep">★</span>
+      <span class="ticker-item">The Backyard's Best Beer</span><span class="ticker-sep">★</span>
+    </div>
+  </div>
+
+  <!-- ======================== QUOTE ======================== -->
+  <section class="quote-strip">
+    <p class="quote-main rv">"That boy ain't right... but his taste in beer? <em>That I'll tell you h'what.</em>"</p>
+    <p class="quote-attr rv rv-d1">— Hank Hill, Arlen TX · Propane Salesman · Alamo Enthusiast</p>
+  </section>
+
+  <!-- ======================== PRODUCTS STICKY ======================== -->
+  <section id="products">
+    <div class="products-track" id="pTrack">
+      <div class="products-sticky" id="pSticky">
+
+        <!-- Slide 1: Alamo Original -->
+        <div class="p-slide s1 active" data-i="0">
+          <div class="p-info">
+            <div class="p-num">01 &nbsp;/&nbsp; 04</div>
+            <h2 class="p-name">ALAMO<br>ORIGINAL</h2>
+            <div class="p-tag">American Lager</div>
+            <p class="p-desc">The one. The classic. Ice cold and damn near perfect. Born in the backyard, built for the block. This is how Texans drink.</p>
+            <div class="p-stats">
+              <div>
+                <div class="p-stat-val">4.2%</div>
+                <div class="p-stat-lbl">ABV</div>
+              </div>
+              <div>
+                <div class="p-stat-val">375ml</div>
+                <div class="p-stat-lbl">Size</div>
+              </div>
+              <div>
+                <div class="p-stat-val">Crisp</div>
+                <div class="p-stat-lbl">Profile</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-can-wrap">
+            <div class="p-ring p-ring-1"></div>
+            <div class="p-ring p-ring-2"></div>
+            <div class="p-can-glow"></div>
+            <img class="p-can-img" src="assets/Alamo - Main - Product Shot.png" alt="Alamo Original">
+          </div>
+        </div>
+
+        <!-- Slide 2: Dark Lager -->
+        <div class="p-slide s2" data-i="1">
+          <div class="p-info">
+            <div class="p-num">02 &nbsp;/&nbsp; 04</div>
+            <h2 class="p-name">DARK<br>LAGER</h2>
+            <div class="p-tag">Dark Lager · 4.4% ABV</div>
+            <p class="p-desc">Smooth, dark, and unapologetic. Rich malt character, effortless finish. For when you want something with a little more to it.</p>
+            <div class="p-stats">
+              <div>
+                <div class="p-stat-val">4.4%</div>
+                <div class="p-stat-lbl">ABV</div>
+              </div>
+              <div>
+                <div class="p-stat-val">375ml</div>
+                <div class="p-stat-lbl">Size</div>
+              </div>
+              <div>
+                <div class="p-stat-val">Rich</div>
+                <div class="p-stat-lbl">Profile</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-can-wrap">
+            <div class="p-ring p-ring-1"></div>
+            <div class="p-ring p-ring-2"></div>
+            <div class="p-can-glow"></div>
+            <img class="p-can-img" src="assets/Dark Lager - Product Shot.png" alt="Dark Lager">
+          </div>
+        </div>
+
+        <!-- Slide 3: Gold Light Lager -->
+        <div class="p-slide s3" data-i="2">
+          <div class="p-info">
+            <div class="p-num">03 &nbsp;/&nbsp; 04</div>
+            <h2 class="p-name">GOLD<br>LIGHT<br>LAGER</h2>
+            <div class="p-tag">Light Lager · 3.5% ABV</div>
+            <p class="p-desc">Sun-kissed, crisp, impossibly cold. The gold standard for a reason. Light enough for all afternoon. Flavourful enough to matter.</p>
+            <div class="p-stats">
+              <div>
+                <div class="p-stat-val">3.5%</div>
+                <div class="p-stat-lbl">ABV</div>
+              </div>
+              <div>
+                <div class="p-stat-val">375ml</div>
+                <div class="p-stat-lbl">Size</div>
+              </div>
+              <div>
+                <div class="p-stat-val">Gold</div>
+                <div class="p-stat-lbl">Profile</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-can-wrap">
+            <div class="p-ring p-ring-1"></div>
+            <div class="p-ring p-ring-2"></div>
+            <div class="p-can-glow"></div>
+            <img class="p-can-img" src="assets/Gold-Lager---Product-Shot.png" alt="Gold Light Lager">
+          </div>
+        </div>
+
+        <!-- Slide 4: Hayz Street IPA -->
+        <div class="p-slide s4" data-i="3">
+          <div class="p-info">
+            <div class="p-num">04 &nbsp;/&nbsp; 04</div>
+            <h2 class="p-name">HAYZ<br>STREET<br>IPA</h2>
+            <div class="p-tag">Hazy IPA · 6.8% ABV</div>
+            <p class="p-desc">Bold hops. Hazy finish. Zero regrets. Named after the street. Made for the block. The most adventurous beer in the Alamo lineup.</p>
+            <div class="p-stats">
+              <div>
+                <div class="p-stat-val">6.8%</div>
+                <div class="p-stat-lbl">ABV</div>
+              </div>
+              <div>
+                <div class="p-stat-val">375ml</div>
+                <div class="p-stat-lbl">Size</div>
+              </div>
+              <div>
+                <div class="p-stat-val">Hazy</div>
+                <div class="p-stat-lbl">Profile</div>
+              </div>
+            </div>
+          </div>
+          <div class="p-can-wrap">
+            <div class="p-ring p-ring-1"></div>
+            <div class="p-ring p-ring-2"></div>
+            <div class="p-can-glow"></div>
+            <img class="p-can-img" src="assets/Hayz Street IPA - Product Shot.png" alt="Hayz Street IPA">
+          </div>
+        </div>
+
+      </div><!-- /products-sticky -->
+    </div><!-- /products-track -->
+
+    <!-- Dot nav -->
+    <div class="p-dots" id="pDots">
+      <button class="p-dot on" data-t="0" aria-label="Alamo Original"></button>
+      <button class="p-dot" data-t="1" aria-label="Dark Lager"></button>
+      <button class="p-dot" data-t="2" aria-label="Gold Lager"></button>
+      <button class="p-dot" data-t="3" aria-label="Hayz Street IPA"></button>
+    </div>
+  </section>
+
+  <!-- ======================== CHARACTERS ======================== -->
+  <section class="chars-section" id="chars">
+    <img class="chars-scene-bg" src="assets/Scene Environment Extended.png" alt="">
+
+    <div class="chars-header">
+      <div class="chars-eyebrow rv">The Alamo Crew</div>
+      <h2 class="chars-title rv rv-d1">THE GANG'S<br><span>ALL HERE</span></h2>
+    </div>
+
+    <div class="chars-row">
+
+      <div class="char-item">
+        <div class="char-bubble">"That's a good beer, I tell you h'what."</div>
+        <img class="char-img" src="assets/Character main.png" alt="Hank">
+      </div>
+
+      <div class="char-item">
+        <div class="char-bubble">"Alamo goes great with a good brisket."</div>
+        <img class="char-img" src="assets/Character wife.png" alt="Peggy">
+      </div>
+
+      <div class="char-item">
+        <div class="char-bubble">"I don't need friends when I have Alamo."</div>
+        <img class="char-img" src="assets/Character friend.png" alt="Bill">
+      </div>
+
+      <div class="char-item">
+        <div class="char-bubble">"*unintelligible appreciation*"</div>
+        <img class="char-img" src="assets/Character friend 2.png" alt="Boomhauer">
+      </div>
+
+      <div class="char-item">
+        <div class="char-bubble">"The government doesn't want you enjoying this."</div>
+        <img class="char-img" src="assets/Character 2.png" alt="Dale">
+      </div>
+
+      <div class="char-item">
+        <div class="char-bubble">"Cold. Crisp. Can't argue with that."</div>
+        <img class="char-img" src="assets/Character black friend.png" alt="">
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================== MANIFESTO ======================== -->
+  <section class="manifesto">
+    <h2 class="rv">Real Beer.<br>Real People.<br>Real Good.</h2>
+    <p class="rv rv-d1">Alamo Beer is the beer of the backyard. Brewed for everyday moments, extraordinary company, and the cold satisfaction of a job well done.</p>
+    <a href="#lineup" class="btn-white rv rv-d2">Shop the Full Lineup</a>
+  </section>
+
+  <!-- ======================== LINEUP GRID ======================== -->
+  <section class="lineup" id="lineup">
+    <div class="lineup-header">
+      <h2 class="lineup-title rv">The Full <span>Lineup</span></h2>
+      <span class="lineup-subtitle rv rv-d1">4 Beers · 1 Legend</span>
+    </div>
+    <div class="lineup-grid">
+      <div class="lineup-card c1 rv">
+        <img class="lcard-img" src="assets/Alamo - main - Product Shot_Shadow.png" alt="Alamo Original">
+        <div class="lcard-name">Alamo Original</div>
+        <div class="lcard-style">American Lager</div>
+        <div class="lcard-abv">4.2% ABV</div>
+        <div class="lcard-bar"></div>
+      </div>
+      <div class="lineup-card c2 rv rv-d1">
+        <img class="lcard-img" src="assets/Dark Lager - Product Shot_Shadow.png" alt="Dark Lager">
+        <div class="lcard-name">Dark Lager</div>
+        <div class="lcard-style">Dark Lager</div>
+        <div class="lcard-abv">4.4% ABV</div>
+        <div class="lcard-bar"></div>
+      </div>
+      <div class="lineup-card c3 rv rv-d2">
+        <img class="lcard-img" src="assets/Gold Lager  - Product Shot_Shadow.png" alt="Gold Light Lager">
+        <div class="lcard-name">Gold Light Lager</div>
+        <div class="lcard-style">Light Lager</div>
+        <div class="lcard-abv">3.5% ABV</div>
+        <div class="lcard-bar"></div>
+      </div>
+      <div class="lineup-card c4 rv rv-d3">
+        <img class="lcard-img" src="assets/Hayz Street - IPA - Product Shot_Shadow.png" alt="Hayz Street IPA">
+        <div class="lcard-name">Hayz Street IPA</div>
+        <div class="lcard-style">Hazy India Pale Ale</div>
+        <div class="lcard-abv">6.8% ABV</div>
+        <div class="lcard-bar"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== DELIVERY ======================== -->
+  <section class="delivery" id="delivery">
+    <div class="delivery-text">
+      <h2 class="rv">Order <span>Alamo</span><br>to Your Door</h2>
+      <p class="rv rv-d1">Cold, fresh, and delivered straight to you. Because sometimes the driveway is as far as you should have to go for a quality beer.</p>
+      <a href="#" class="btn-yellow rv rv-d2">Order Now</a>
+    </div>
+    <div class="delivery-img-wrap rv rv-d1">
+      <img class="delivery-img" src="assets/alamo delivery.png" alt="Alamo Beer Delivery">
+    </div>
+  </section>
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img class="footer-brand-logo" src="assets/White Alamo Logo.png" alt="Alamo Beer">
+        <p>The official beer of the backyard. Ice cold, always honest. Please enjoy responsibly — Alamo Beer is for adults 18+.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Our Beers</h4>
+        <ul>
+          <li><a href="#">Alamo Original</a></li>
+          <li><a href="#">Dark Lager</a></li>
+          <li><a href="#">Gold Light Lager</a></li>
+          <li><a href="#">Hayz Street IPA</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">Our Story</a></li>
+          <li><a href="#">Stockists</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Media Kit</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">TikTok</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">YouTube</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-legal">© 2024 Alamo Beer Co. All rights reserved. Based on the King of the Hill animated series. Drink responsibly.</p>
+      <div class="age-badge">18+ Only</div>
+    </div>
+  </footer>
+
+  <script>
+    // ── CURSOR ──────────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button, .char-item, .lineup-card').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+
+    // ── NAV ─────────────────────────────────────────────────
+    const nav = document.getElementById('nav');
+    const onScroll = () => {
+      nav.classList.toggle('solid', window.scrollY > 60);
+      handleProducts();
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // ── PARALLAX HERO ───────────────────────────────────────
+    const heroScene  = document.getElementById('heroScene');
+    const heroChars  = document.getElementById('heroChars');
+    const heroHeight = () => document.getElementById('hero').offsetHeight;
+
+    window.addEventListener('scroll', () => {
+      const sy = window.scrollY;
+      if (sy > heroHeight()) return;
+      const p = sy / heroHeight();
+      heroScene.style.transform = `translateY(${p * 70}px)`;
+      heroChars.style.transform = `translateY(${p * 45}px)`;
+    }, { passive: true });
+
+    // ── PRODUCTS STICKY ─────────────────────────────────────
+    const pTrack  = document.getElementById('pTrack');
+    const slides  = document.querySelectorAll('.p-slide');
+    const dots    = document.querySelectorAll('.p-dot');
+    const pDots   = document.getElementById('pDots');
+    let   cur     = 0;
+
+    function setProduct(i) {
+      if (i === cur && slides[i].classList.contains('active')) return;
+      slides[cur].classList.remove('active');
+      dots[cur].classList.remove('on');
+      cur = Math.max(0, Math.min(3, i));
+      // Restart can bounce animation
+      const can = slides[cur].querySelector('.p-can-img');
+      can.style.animation = 'none';
+      can.offsetHeight; // force reflow
+      can.style.animation = '';
+      slides[cur].classList.add('active');
+      dots[cur].classList.add('on');
+    }
+
+    function handleProducts() {
+      const sy       = window.scrollY;
+      const trackTop = pTrack.offsetTop;
+      const trackH   = pTrack.offsetHeight;
+      const vh       = window.innerHeight;
+      const inView   = sy >= trackTop - 60 && sy <= trackTop + trackH - vh + 60;
+
+      pDots.classList.toggle('show', inView);
+      if (!inView) return;
+
+      const rel  = sy - trackTop;
+      const max  = trackH - vh;
+      const prog = Math.max(0, Math.min(1, rel / max));
+      setProduct(Math.min(3, Math.floor(prog * 4)));
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        const trackTop = pTrack.offsetTop;
+        const trackH   = pTrack.offsetHeight;
+        const vh       = window.innerHeight;
+        const target   = trackTop + (i / 4) * (trackH - vh) + 8;
+        window.scrollTo({ top: target, behavior: 'smooth' });
+      });
+    });
+
+    // ── SCROLL REVEALS ──────────────────────────────────────
+    const revEls = document.querySelectorAll('.rv');
+    const revObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          revObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    revEls.forEach(el => revObs.observe(el));
+
+    // ── CHARACTERS STAGGER ──────────────────────────────────
+    const charItems = document.querySelectorAll('.char-item');
+    const charObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          charItems.forEach((c, idx) => {
+            setTimeout(() => {
+              c.style.opacity   = '1';
+              c.style.transform = 'none';
+            }, idx * 80);
+          });
+          charObs.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+
+    charItems.forEach(c => {
+      c.style.opacity   = '0';
+      c.style.transform = 'translateY(30px)';
+      c.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    });
+    if (charItems[0]) charObs.observe(charItems[0].closest('.chars-section'));
+
+    // ── LINEUP CARDS STAGGER ────────────────────────────────
+    const lineupObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          document.querySelectorAll('.rv').forEach(el => {
+            if (el.closest('.lineup')) el.classList.add('in');
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+    const lineup = document.querySelector('.lineup');
+    if (lineup) lineupObs.observe(lineup);
+  </script>
+</body>
+</html>

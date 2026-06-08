@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Story — Alamo Beer Co.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Barlow', sans-serif; background: #130F0A; color: #E8DFC8; overflow-x: hidden; cursor: none; }
+
+    :root {
+      --blue: #1950C2; --red: #FE1A1E; --yellow: #FEDF30;
+      --cream: #E8DFC8; --dark: #130F0A; --mid: #1E1810;
+    }
+
+    /* CURSOR */
+    .cursor { position: fixed; width: 12px; height: 12px; background: var(--red); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .22s, height .22s, background .22s; }
+    .cursor.big { width: 36px; height: 36px; background: rgba(254,26,30,.2); border: 2px solid var(--red); }
+
+    /* NAV */
+    nav { position: fixed; inset: 0 0 auto 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 3.5rem; transition: background .4s, padding .4s; }
+    nav.solid { background: #0D0A06; padding: 0.85rem 3.5rem; box-shadow: 0 2px 20px rgba(0,0,0,.5); }
+    .nav-logo { height: 42px; object-fit: contain; }
+    .nav-links { display: flex; align-items: center; gap: 2.5rem; list-style: none; }
+    .nav-links a { color: var(--cream); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .875rem; letter-spacing: .15em; text-transform: uppercase; opacity: .8; transition: opacity .2s; }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta { background: var(--red) !important; color: white !important; opacity: 1 !important; padding: .5rem 1.3rem; clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%); }
+    .nav-cta:hover { background: var(--yellow) !important; color: var(--dark) !important; }
+
+    /* HERO */
+    .page-hero {
+      position: relative; height: 100vh; min-height: 580px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('assets/brewery-from-briddge.jpg');
+      background-size: cover; background-position: center 40%;
+      filter: brightness(0.35) saturate(0.8);
+      transform: scale(1.06);
+      transition: transform 8s ease;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(19,15,10,.3) 0%, rgba(19,15,10,.6) 60%, #130F0A 100%);
+    }
+    .hero-content { position: relative; z-index: 2; text-align: center; padding: 0 1.5rem; }
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .8rem;
+      letter-spacing: .35em; text-transform: uppercase; color: var(--yellow);
+      margin-bottom: 1.2rem; animation: fadeUp .7s ease .3s both;
+    }
+    .hero-title {
+      font-family: 'Alfa Slab One', serif; font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: .92; color: white; margin-bottom: 1.5rem;
+      animation: fadeUp .8s ease .5s both;
+    }
+    .hero-title span { color: var(--yellow); }
+    .hero-sub {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600;
+      font-size: clamp(.9rem, 2vw, 1.15rem); letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(232,223,200,.55); animation: fadeUp .7s ease .7s both;
+    }
+    .hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: .5rem; animation: fadeIn 1s ease 1.2s both; }
+    .hero-scroll span { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .65rem; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+    .scroll-line { width: 1px; height: 44px; background: linear-gradient(to bottom, rgba(254,223,48,.6), transparent); animation: lineAnim 1.8s ease-in-out infinite; }
+    @keyframes lineAnim { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+    /* INTRO STAT BAR */
+    .stat-bar {
+      background: var(--yellow); display: flex; justify-content: center;
+      gap: 0; overflow: hidden;
+    }
+    .stat-item {
+      flex: 1; text-align: center; padding: 1.4rem 1rem;
+      border-right: 1px solid rgba(0,0,0,.12);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-val { font-family: 'Alfa Slab One', serif; font-size: clamp(1.6rem,3vw,2.4rem); color: var(--dark); line-height: 1; }
+    .stat-lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(0,0,0,.5); margin-top: .3rem; }
+
+    /* TIMELINE */
+    .timeline-section { padding: 8rem 0; position: relative; }
+    .timeline-section::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 1px; background: linear-gradient(to bottom, transparent, rgba(254,223,48,.3) 10%, rgba(254,223,48,.3) 90%, transparent);
+      transform: translateX(-50%);
+    }
+    .tl-heading { text-align: center; margin-bottom: 6rem; padding: 0 2rem; }
+    .tl-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .75rem; letter-spacing: .35em; text-transform: uppercase; color: var(--red); margin-bottom: .8rem; }
+    .tl-title { font-family: 'Alfa Slab One', serif; font-size: clamp(2.5rem,5vw,5rem); color: white; }
+    .tl-title span { color: var(--yellow); }
+
+    .tl-entry {
+      display: grid; grid-template-columns: 1fr 80px 1fr; align-items: start;
+      gap: 0; margin-bottom: 5rem; padding: 0 4rem;
+      max-width: 1100px; margin-left: auto; margin-right: auto;
+    }
+    .tl-entry:last-child { margin-bottom: 0; }
+
+    /* Alternating — odd entries: text left, image right */
+    /* Even entries: image left, text right */
+    .tl-entry.flip .tl-text { order: 3; }
+    .tl-entry.flip .tl-mid  { order: 2; }
+    .tl-entry.flip .tl-visual { order: 1; }
+
+    .tl-text { padding: 1.5rem 3rem 1.5rem 0; }
+    .tl-entry.flip .tl-text { padding: 1.5rem 0 1.5rem 3rem; }
+
+    .tl-year {
+      font-family: 'Alfa Slab One', serif; font-size: clamp(3.5rem,6vw,6.5rem);
+      line-height: 1; color: rgba(254,223,48,.12); margin-bottom: .3rem;
+      letter-spacing: -.02em;
+    }
+    .tl-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .72rem; letter-spacing: .3em; text-transform: uppercase; color: var(--yellow); margin-bottom: .9rem; }
+    .tl-headline { font-family: 'Alfa Slab One', serif; font-size: clamp(1.5rem,2.5vw,2.2rem); color: white; line-height: 1.1; margin-bottom: 1rem; }
+    .tl-body { font-size: 1rem; line-height: 1.72; color: rgba(232,223,200,.65); }
+
+    /* Mid column: dot + vertical alignment */
+    .tl-mid { display: flex; flex-direction: column; align-items: center; padding-top: 1.8rem; }
+    .tl-dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--yellow); border: 3px solid #130F0A;
+      box-shadow: 0 0 0 2px var(--yellow); flex-shrink: 0;
+    }
+
+    /* Image side */
+    .tl-visual { display: flex; align-items: flex-start; }
+    .tl-entry.flip .tl-visual { justify-content: flex-end; }
+    .tl-img-wrap { position: relative; }
+    .tl-img {
+      width: 100%; max-width: 420px; display: block;
+      border: 3px solid rgba(254,223,48,.15);
+    }
+    .tl-img.historic { filter: sepia(.8) contrast(1.1) brightness(.95); }
+    .tl-img-caption {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: .68rem;
+      letter-spacing: .2em; text-transform: uppercase; color: rgba(232,223,200,.4);
+      margin-top: .6rem; text-align: center;
+    }
+
+    /* Empty placeholder for alternating grid */
+    .tl-empty { /* intentionally empty */ }
+
+    /* PROHIBITION DIVIDER */
+    .prohibition-bar {
+      background: var(--red); padding: 4rem 2rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .prohibition-bar::before {
+      content: 'PROHIBITION'; position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%); font-family: 'Alfa Slab One', serif;
+      font-size: clamp(4rem,14vw,12rem); color: rgba(0,0,0,.12); white-space: nowrap; pointer-events: none;
+    }
+    .prohibition-bar h2 { font-family: 'Alfa Slab One', serif; font-size: clamp(1.8rem,4vw,3.5rem); color: white; position: relative; margin-bottom: .75rem; }
+    .prohibition-bar p { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 1rem; letter-spacing: .12em; color: rgba(255,255,255,.6); text-transform: uppercase; position: relative; }
+
+    /* BREWERY SECTION */
+    .brewery { background: var(--mid); padding: 8rem 4rem; }
+    .brewery-header { text-align: center; margin-bottom: 5rem; }
+    .brewery-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: .75rem; letter-spacing: .35em; text-transform: uppercase; color: var(--red); margin-bottom: .8rem; }
+    .brewery-title { font-family: 'Alfa Slab One', serif; font-size: clamp(2.5rem,5vw,5rem); color: white; line-height: 1; }
+    .brewery-title span { color: var(--yellow); }
+
+    .brewery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; max-width: 1100px; margin: 0 auto; }
+
+    .brewery-photo {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+    }
+    .brewery-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform .6s ease;
+    }
+    .brewery-photo:hover img { transform: scale(1.03); }
+    .brewery-photo-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(19,15,10,.9), transparent);
+      padding: 2rem 1.5rem .75rem;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: .72rem; letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(232,223,200,.6);
+    }
+
+    .brewery-info { display: flex; flex-direction: column; gap: 2.5rem; }
+
+    .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .5rem; }
+    .spec-card {
+      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07);
+      padding: 1.1rem 1rem;
+    }
+    .spec-num { font-family: 'Alfa Slab One', serif; font-size: clamp(1.4rem,2.5vw,2rem); color: var(--yellow); line-height: 1; }
+    .spec-desc { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: rgba(232,223,200,.45); margin-top: .3rem; }
+
+    .taproom-title { font-family: 'Alfa Slab One', serif; font-size: 1.6rem; color: white; margin-bottom: .75rem; }
+    .taproom-text { font-size: .975rem; line-height: 1.75; color: rgba(232,223,200,.6); }
+    .taproom-text + .taproom-text { margin-top: 1rem; }
+
+    .taproom-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.2rem; }
+    .taproom-tag {
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+      font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+      padding: .35rem .8rem; border: 1px solid rgba(254,223,48,.3); color: var(--yellow);
+    }
+
+    /* CLOSING CTA */
+    .closing { background: var(--blue); padding: 7rem 2rem; text-align: center; position: relative; overflow: hidden; }
+    .closing::before { content: 'ALAMO'; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); font-family: 'Alfa Slab One', serif; font-size: clamp(8rem,20vw,18rem); color: rgba(255,255,255,.05); white-space: nowrap; pointer-events: none; }
+    .closing h2 { font-family: 'Alfa Slab One', serif; font-size: clamp(2.2rem,5vw,4.5rem); color: white; line-height: 1.05; margin-bottom: 1.25rem; position: relative; }
+    .closing h2 span { color: var(--yellow); }
+    .closing p { font-size: 1.05rem; color: rgba(255,255,255,.65); max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.7; position: relative; }
+    .btn-yellow { display: inline-block; background: var(--yellow); color: var(--dark); font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: .9rem; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; padding: 1rem 2.4rem; clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition: all .25s; }
+    .btn-yellow:hover { background: white; transform: translateY(-3px); }
+
+    /* FOOTER */
+    footer { background: #0A0806; padding: 2.5rem 4rem; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.06); }
+    .footer-logo { height: 36px; object-fit: contain; }
+    .footer-legal { font-size: .75rem; color: rgba(255,255,255,.2); }
+    .age-badge { background: var(--red); color: white; font-family: 'Barlow Condensed', sans-serif; font-weight: 800; font-size: .68rem; letter-spacing: .15em; padding: .3rem .8rem; text-transform: uppercase; }
+
+    /* REVEAL */
+    .rv { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .rv.in { opacity: 1; transform: none; }
+    .rv-d1 { transition-delay: .1s; } .rv-d2 { transition-delay: .2s; } .rv-d3 { transition-delay: .3s; }
+
+    /* KEYFRAMES */
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .cursor { display: none; } body { cursor: auto; }
+      nav { padding: .9rem 1.25rem; }
+      nav.solid { padding: .7rem 1.25rem; }
+      .nav-logo { height: 32px; }
+      .nav-links li { display: none; }
+      .nav-links li:last-child { display: block; }
+      .nav-cta { font-size: .72rem; padding: .45rem .9rem; }
+
+      .page-hero { height: 75dvh; min-height: 480px; }
+      .hero-title { font-size: clamp(2.8rem,11vw,5rem); }
+
+      .stat-bar { flex-wrap: wrap; }
+      .stat-item { flex: 0 0 50%; border-bottom: 1px solid rgba(0,0,0,.12); }
+      .stat-item:nth-child(2) { border-right: none; }
+
+      /* Timeline — stack to single column */
+      .timeline-section::before { left: 20px; transform: none; }
+      .tl-entry, .tl-entry.flip {
+        display: block; padding: 0 1.25rem 0 3.5rem;
+        position: relative; margin-bottom: 3.5rem;
+      }
+      .tl-mid { position: absolute; left: 12px; top: 1.8rem; width: auto; padding: 0; }
+      .tl-dot { width: 14px; height: 14px; }
+      .tl-text { padding: 0 0 1.5rem 0; order: unset !important; }
+      .tl-visual { order: unset !important; justify-content: flex-start !important; margin-top: 1.25rem; }
+      .tl-img { max-width: 100%; }
+      .tl-year { font-size: clamp(2.5rem,10vw,4rem); }
+
+      .brewery { padding: 4rem 1.25rem; }
+      .brewery-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .spec-grid { grid-template-columns: repeat(2,1fr); }
+      .brewery-photo { aspect-ratio: 4/3; }
+
+      footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem 1.25rem; }
+      .closing { padding: 4.5rem 1.25rem; }
+      .closing h2 { font-size: clamp(1.8rem,7vw,3rem); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="index.html"><img src="assets/White Alamo Logo.png" class="nav-logo" alt="Alamo Beer"></a>
+    <ul class="nav-links">
+      <li><a href="index.html#products">Our Beers</a></li>
+      <li><a href="index.html#chars">The Crew</a></li>
+      <li><a href="#">Our Story</a></li>
+      <li><a href="index.html#delivery" class="nav-cta">Order Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Since 1884 · San Antonio, Texas</div>
+      <h1 class="hero-title">140 Years<br><span>In The Making</span></h1>
+      <p class="hero-sub">The story of the beer the backyard was built on</p>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat-item">
+      <div class="stat-val">1884</div>
+      <div class="stat-lbl">Founded</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">140+</div>
+      <div class="stat-lbl">Years of History</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">1,000hL</div>
+      <div class="stat-lbl">Brewed Per Year</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">4</div>
+      <div class="stat-lbl">Signature Brews</div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <section class="timeline-section">
+    <div class="tl-heading">
+      <div class="tl-eyebrow rv">A History Worth Drinking To</div>
+      <h2 class="tl-title rv rv-d1">The <span>Long Pour</span></h2>
+    </div>
+
+    <!-- 1884 -->
+    <div class="tl-entry rv">
+      <div class="tl-text">
+        <div class="tl-year">1884</div>
+        <div class="tl-label">The Beginning</div>
+        <h3 class="tl-headline">Texas's First Mechanised Brewery Opens Its Doors</h3>
+        <p class="tl-body">Lone Star Brewing Company opened in San Antonio, Texas — the first mechanised brewery in the state. Alamo Beer's roots trace directly to this moment: a refreshing lager brewed from premium barley malt, Saaz hops, and Texas rice. Made for the working man and well-loved by locals, it became the beer of the backyard before the backyard even had a name.</p>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+      <div class="tl-visual">
+        <div class="tl-img-wrap">
+          <img class="tl-img historic" src="assets/image-edited.png" alt="Lone Star Brewing Company, 1884">
+          <p class="tl-img-caption">Lone Star Brewing Company · San Antonio, 1884</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROHIBITION BAR -->
+    <div class="prohibition-bar">
+      <h2>1918 — The Dry Years</h2>
+      <p>Prohibition dried up the supply of Alamo Beer along with every other brew across the nation. The Alamo Beer brand was lost. The trade name went dormant.</p>
+    </div>
+
+    <!-- 1995 -->
+    <div class="tl-entry flip rv" style="margin-top:5rem;">
+      <div class="tl-text">
+        <div class="tl-year">1995</div>
+        <div class="tl-label">The Revival</div>
+        <h3 class="tl-headline">The Trademark Recovered. The Beer Reborn.</h3>
+        <p class="tl-body">Decades after Prohibition silenced the taps, the trademark was recovered and the first batch of the new Alamo Beer was brewed. A brand once thought lost was brought back to life — and Texas was thirsty.</p>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+      <div class="tl-visual">
+        <div class="tl-img-wrap">
+          <img class="tl-img" src="assets/Alamo - Main - Product Shot.png" alt="Alamo Beer" style="max-width:300px; background:#111;">
+          <p class="tl-img-caption">Alamo Beer · Reborn 1995</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2003 -->
+    <div class="tl-entry rv">
+      <div class="tl-text">
+        <div class="tl-year">2003</div>
+        <div class="tl-label">The Company</div>
+        <h3 class="tl-headline">Alamo Beer Company Opens With a Simple Belief</h3>
+        <p class="tl-body">Great beer is best enjoyed in good company. Alamo Beer Company opened its doors with its first of many brews — Alamo Golden Ale — and the conviction that a cold beer shared with good people is one of life's essential pleasures. The rest, they say, is history.</p>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+      <div class="tl-visual">
+        <div class="tl-img-wrap">
+          <img class="tl-img" src="assets/Western-cans-Alamo-4 1.png" alt="Alamo Beer Cans" style="max-width:380px; background:#111;">
+          <p class="tl-img-caption">Alamo Beer Company · Est. 2003</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2025 -->
+    <div class="tl-entry flip rv">
+      <div class="tl-text">
+        <div class="tl-year">2025</div>
+        <div class="tl-label">Fresh &amp; Local</div>
+        <h3 class="tl-headline">Still Brewing. Still Believing.</h3>
+        <p class="tl-body">Over 140 years since the first barrel rolled out of San Antonio, Alamo Beer is still here — still cold, still honest, still made for the people who earn it. Four beers. One legend. The backyard's best.</p>
+      </div>
+      <div class="tl-mid"><div class="tl-dot"></div></div>
+      <div class="tl-visual">
+        <div class="tl-img-wrap">
+          <img class="tl-img" src="assets/brewery-from-briddge.jpg" alt="Alamo Brewery 2025" style="max-width:420px;">
+          <p class="tl-img-caption">Alamo Beer Co. · San Antonio, 2025</p>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- BREWERY SECTION -->
+  <section class="brewery" id="brewery">
+    <div class="brewery-header">
+      <div class="brewery-eyebrow rv">San Antonio, Texas</div>
+      <h2 class="brewery-title rv rv-d1">Our <span>Brewery</span></h2>
+    </div>
+
+    <div class="brewery-grid">
+      <div class="brewery-photo rv">
+        <img src="assets/brewery-from-briddge.jpg" alt="Alamo Brewery">
+        <div class="brewery-photo-label">Alamo Beer Company · San Antonio</div>
+      </div>
+
+      <div class="brewery-info">
+        <div class="rv">
+          <div class="spec-grid">
+            <div class="spec-card">
+              <div class="spec-num">15hL</div>
+              <div class="spec-desc">3-Vessel Brewhouse</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-num">1,000hL</div>
+              <div class="spec-desc">Brewed Per Year</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-num">20T</div>
+              <div class="spec-desc">Malted Barley &amp; Wheat</div>
+            </div>
+            <div class="spec-card">
+              <div class="spec-num">700kg</div>
+              <div class="spec-desc">Hops Per Year</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rv rv-d1">
+          <h3 class="taproom-title">The Taproom</h3>
+          <p class="taproom-text">We operate a 15hL 3-vessel Brewhouse with 2×30hL and 6×15hL Unitanks, producing around 1,000hL of beer per annum — using around 20 tonnes of Malted Barley &amp; Wheat, 700kg of Hops, and 75kg of Yeast.</p>
+          <p class="taproom-text">Our beers are unfiltered, pasteurised, vegan friendly and brewed mostly from Australian products. We don't just serve beer — there's a range of Queensland-made Wines, Spirits and Ginger Beer, plus soft drinks and iced teas.</p>
+          <p class="taproom-text">There's no hiding our brewing equipment out of sight — grab a table right next to our fermenters and enjoy a schooner or two.</p>
+          <div class="taproom-tags">
+            <span class="taproom-tag">Family Friendly</span>
+            <span class="taproom-tag">Dog Friendly</span>
+            <span class="taproom-tag">Vegan Friendly</span>
+            <span class="taproom-tag">Unfiltered</span>
+            <span class="taproom-tag">Local Products</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA -->
+  <section class="closing">
+    <h2 class="rv">Crack One Open.<br><span>You've Earned It.</span></h2>
+    <p class="rv rv-d1">140 years of brewing history. Four exceptional beers. One backyard. Come experience it for yourself.</p>
+    <a href="index.html#products" class="btn-yellow rv rv-d2">Shop Our Beers</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <img src="assets/White Alamo Logo.png" class="footer-logo" alt="Alamo Beer">
+    <p class="footer-legal">© 2024 Alamo Beer Co. All rights reserved. Please drink responsibly.</p>
+    <div class="age-badge">18+ Only</div>
+  </footer>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => { cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px'; });
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+    });
+
+    // Nav
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => nav.classList.toggle('solid', window.scrollY > 60), { passive: true });
+
+    // Hero BG subtle zoom-in on load
+    const heroBg = document.getElementById('heroBg');
+    window.addEventListener('load', () => heroBg.classList.add('loaded'));
+
+    // Scroll reveals
+    const revEls = document.querySelectorAll('.rv');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    revEls.forEach(el => obs.observe(el));
+
+    // Hero parallax
+    window.addEventListener('scroll', () => {
+      const p = Math.min(window.scrollY / window.innerHeight, 1);
+      heroBg.style.transform = `scale(1) translateY(${p * 80}px)`;
+    }, { passive: true });
+  </script>
+</body>
+</html>
