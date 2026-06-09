@@ -324,6 +324,13 @@
       color: rgba(255,255,255,0.45);
       position: relative;
     }
+    .quote-anim {
+      animation: quoteReveal 0.9s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes quoteReveal {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
 
     /* ==============================
        PRODUCTS — STICKY SCROLL
@@ -1435,8 +1442,8 @@
 
   <!-- ======================== QUOTE ======================== -->
   <section class="quote-strip">
-    <p class="quote-main rv">"That boy ain't right... but his taste in beer? <em>That I'll tell you h'what.</em>"</p>
-    <p class="quote-attr rv rv-d1">— Hank Hill, Arlen TX · Propane Salesman · Alamo Enthusiast</p>
+    <p class="quote-main quote-anim">"That boy ain't right... but his taste in beer? <em>That I'll tell you h'what.</em>"</p>
+    <p class="quote-attr quote-anim" style="animation-delay:.18s">— Hank Hill, Arlen TX · Propane Salesman · Alamo Enthusiast</p>
   </section>
 
   <!-- ======================== PRODUCTS STICKY ======================== -->
@@ -1678,7 +1685,7 @@
   </section>
 
   <!-- ======================== INSTAGRAM FEED ======================== -->
-  <section class="feed-section rv">
+  <section class="feed-section">
     <div class="feed-header">
       <div>
         <div class="feed-eyebrow">Follow Along</div>
