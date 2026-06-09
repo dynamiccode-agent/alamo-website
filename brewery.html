@@ -18,8 +18,8 @@
     }
 
     /* CURSOR */
-    .cursor { position: fixed; width: 12px; height: 12px; background: var(--red); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .22s, height .22s, background .22s; }
-    .cursor.big { width: 36px; height: 36px; background: rgba(254,26,30,.2); border: 2px solid var(--red); }
+    .cursor { position: fixed; top: 0; left: 0; width: 12px; height: 12px; margin: -6px 0 0 -6px; background: var(--red); border-radius: 50%; pointer-events: none; z-index: 9999; will-change: transform; transition: width .22s, height .22s, background .22s, margin .22s; }
+    .cursor.big { width: 36px; height: 36px; margin: -18px 0 0 -18px; background: rgba(254,26,30,.2); border: 2px solid var(--red); }
 
     /* NAV */
     nav { position: fixed; inset: 0 0 auto 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 3.5rem; transition: background .4s, padding .4s; }
@@ -642,7 +642,7 @@
   <script>
     // Cursor
     const cursor = document.getElementById('cursor');
-    document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+    let _cx=0,_cy=0,_raf=null; document.addEventListener('mousemove', e => { _cx=e.clientX; _cy=e.clientY; if(!_raf) _raf=requestAnimationFrame(()=>{ cursor.style.transform=`translate3d(${_cx}px,${_cy}px,0)`; _raf=null; }); },{passive:true});
     document.querySelectorAll('a,button').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('big'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('big'));

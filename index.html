@@ -34,19 +34,19 @@
     ============================== */
     .cursor {
       position: fixed;
-      width: 14px;
-      height: 14px;
+      top: 0; left: 0;
+      width: 14px; height: 14px;
+      margin: -7px 0 0 -7px;
       background: var(--red);
       border-radius: 50%;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.12s ease, width 0.25s ease, height 0.25s ease, background 0.25s ease;
-      mix-blend-mode: normal;
+      will-change: transform;
+      transition: width 0.22s ease, height 0.22s ease, background 0.22s ease, margin 0.22s ease, border 0.22s ease;
     }
     .cursor.big {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
+      margin: -20px 0 0 -20px;
       background: rgba(254, 26, 30, 0.25);
       border: 2px solid var(--red);
     }
@@ -1780,10 +1780,14 @@
   <script>
     // ── CURSOR ──────────────────────────────────────────────
     const cursor = document.getElementById('cursor');
+    let _cx = 0, _cy = 0, _rafCur = null;
     document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top  = e.clientY + 'px';
-    });
+      _cx = e.clientX; _cy = e.clientY;
+      if (!_rafCur) _rafCur = requestAnimationFrame(() => {
+        cursor.style.transform = `translate3d(${_cx}px,${_cy}px,0)`;
+        _rafCur = null;
+      });
+    }, { passive: true });
     document.querySelectorAll('a, button, .char-item, .lineup-card').forEach(el => {
       el.addEventListener('mouseenter', () => cursor.classList.add('big'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
